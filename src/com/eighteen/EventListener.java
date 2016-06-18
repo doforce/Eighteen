@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 
+/**
+ * 事件监听类
+ */
 public class EventListener {
 
 	/**
@@ -20,81 +23,88 @@ public class EventListener {
 
 	/**
 	 * 重新开始的事件
-	 * @param judgeWin
-	 * @param myJFrame
+	 * @param judgement
+	 * @param gamePanel
 	 * @param button
      */
-	public  void RestartGame(JudgeWin judgeWin,MyJFrame myJFrame,JButton button){
-		resetting(judgeWin,myJFrame);
+	public  void RestartGame(Judgement judgement, GamePanel gamePanel, JButton button){
+		resetting(judgement, gamePanel);
 		button.setFocusable(false);
-		myJFrame.setFocusable(true);
+		gamePanel.setFocusable(true);
 	}
 
 	/**
 	 * 选择游戏模式的事件
 	 * @param event
-	 * @param judgeWin
+	 * @param judgement
 	 * @param jComboBox
-	 * @param myJFrame
+	 * @param gamePanel
      */
-	public  void gameMode(ItemEvent event,JudgeWin judgeWin,JComboBox jComboBox,MyJFrame myJFrame){
+	public  void gameMode(ItemEvent event, Judgement judgement, JComboBox jComboBox, GamePanel gamePanel){
 		if (event.getStateChange()==ItemEvent.SELECTED){
 			if (event.getItem().equals("4X4")){
 				Constant.ACCOUNT=4;
 				Constant.SIZE=100;
 				Constant.isImg100=true;
-				changeMode(judgeWin,jComboBox,myJFrame);
+				changeMode(judgement,jComboBox, gamePanel);
 			}else {
 				Constant.ACCOUNT=5;
 				Constant.SIZE=80;
 				Constant.isImg100=false;
-				changeMode(judgeWin,jComboBox,myJFrame);
+				changeMode(judgement,jComboBox, gamePanel);
 			}
 		}
 	}
 
 	/**
 	 * 监听键盘
-	 * @param
+	 * @param event
+	 * @param judgement
+	 * @param frame
      */
-	public void keyListener(KeyEvent event,JudgeWin judgeWin,MyJFrame frame){
+	public void keyListener(KeyEvent event, Judgement judgement, GamePanel frame){
 		if(event.getKeyCode()>=36 && event.getKeyCode()<=40){		//判断是否按下方向盘
-			judgeWin.change=false;
-			judgeWin.move(event.getKeyCode());
-			if(judgeWin.over())
+			judgement.change=false;
+			judgement.move(event.getKeyCode());
+			if(judgement.over())
 			{
-				JOptionPane.showMessageDialog(null, "你输了");
+				JOptionPane.showMessageDialog(null, "你输了!");
 			}
-			else if(judgeWin.change){
+			else if(judgement.change){
 				boolean check=true;
 				while(check){
 					int x=(int)(Math.random()*Constant.ACCOUNT);
 					int y=(int)(Math.random()*Constant.ACCOUNT);
-					if(judgeWin.loc[x][y]==-1){
+					if(judgement.loc[x][y]==-1){
 						check=false;
-						judgeWin.loc[x][y]=0;
+						judgement.loc[x][y]=0;
 					}
 				}
 			}
 		}
 		frame.repaint();
-		if(judgeWin.win())
+		if(judgement.win())
 		{
-			JOptionPane.showMessageDialog(null, "哇哇！好厉害哦");
+			JOptionPane.showMessageDialog(null, "好厉害哦,那么难都赢了！");
 		}
 
 	}
 
-	private void resetting(JudgeWin judgeWin,MyJFrame myJFrame){
-		judgeWin.init();
-		judgeWin.isOver =false;
-		judgeWin.grade =0;
-		myJFrame.repaint();
+	/**
+	 * 重置方法
+	 * @param judgement
+	 * @param gamePanel
+     */
+	private void resetting(Judgement judgement, GamePanel gamePanel){
+		judgement.init();
+		judgement.isOver =false;
+		judgement.grade =0;
+		gamePanel.repaint();
 	}
 
-	private void changeMode(JudgeWin judgeWin, JComboBox jComboBox, MyJFrame myJFrame){
-		resetting(judgeWin,myJFrame);
+	private void changeMode(Judgement judgement, JComboBox jComboBox, GamePanel gamePanel){
+		resetting(judgement, gamePanel);
 		jComboBox.setFocusable(false);
-		myJFrame.setFocusable(true);
+		gamePanel.setFocusable(true);
 	}
 }

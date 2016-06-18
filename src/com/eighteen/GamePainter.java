@@ -1,19 +1,21 @@
 package com.eighteen;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class GameBoard  {
-	private JudgeWin jw;
+/**
+ *画图类
+ */
+public class GamePainter {
+	private Judgement jw;
 	/**
 	 * 预先加载图片到数组里
 	 */
-	public GameBoard(JudgeWin judgeWin){
-		this.jw =judgeWin;
+	public GamePainter(Judgement judgement){
+		this.jw = judgement;
 		int num=2;
 		for (int i = 0; i < Constant.img100.length; i++ ) {
 			try {
@@ -28,7 +30,10 @@ public class GameBoard  {
 		}
 	}
 
-	
+	/**
+	 * JFrame的paint方法调用的画图方法
+	 * @param g
+     */
 	public void paint(Graphics g) {
 		for(int x = 0; x<Constant.ACCOUNT; x++)
 			for(int y = 0; y<Constant.ACCOUNT; y++){
@@ -40,6 +45,7 @@ public class GameBoard  {
 			for(int y = 0; y<Constant.ACCOUNT; y++)
 			{
 				if(jw.loc[x][y]!=-1) {
+					//如果选中4X4就加载100像素打图片，否在加载80像素的图片
 					if (Constant.isImg100) {
 						g.drawImage(Constant.img100[jw.loc[x][y]], 20 + y * (Constant.SIZE + 5), 60 + x * (Constant.SIZE + 5), null);
 					}else {
@@ -47,18 +53,12 @@ public class GameBoard  {
 					}
 				}
 			}
-
+		//显示分数
 		g.setFont(new Font("Tahoma", Font.BOLD, 21));
 		g.setColor(Color.BLACK);
 		g.drawString("分数：",40,40);
-		g.drawString(Integer.toString(JudgeWin.grade),100,40);
+		g.drawString(Integer.toString(Judgement.grade),100,40);
 
-		g.drawString("所用时间：",250,40);
-
-//		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("mm:ss");
-//		Date date=new Date();
-//		String s=simpleDateFormat.format(date);
-//		System.out.println(s);
 
 		}
 	}

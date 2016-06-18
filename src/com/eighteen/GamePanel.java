@@ -1,49 +1,47 @@
 package com.eighteen;
 
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import javax.swing.JButton;
+import java.awt.*;
 import java.awt.event.*;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Graphics;
 
-public class MyJFrame extends JFrame  {
+/**
+ * 窗体类
+ */
+public class GamePanel extends JFrame  {
 
 	private JPanel panelOne;
-    private GameBoard gameBoard;
+    private GamePainter gamePainter;
     private JComboBox cbGameMode;
-    //获取屏幕宽和高
-    private int width=Toolkit.getDefaultToolkit().getScreenSize().width;
-    private int height=Toolkit.getDefaultToolkit().getScreenSize().height;
 
     private JButton btnRestartGame;
-	public  MyJFrame mjf;
-	private JudgeWin jw;
+	public GamePanel gp;
+	private Judgement jw;
+	private JLabel time;
+	private String defTime="00:00";
 
-	
 
-    public MyJFrame() {
-		jw =new JudgeWin();
-    	gameBoard=new GameBoard(jw);
-    	mjf =this;
+
+    public GamePanel() {
+		jw =new Judgement();
+    	gamePainter =new GamePainter(jw);
+    	gp =this;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(Constant.width,Constant.height);
-        setLocation((width-Constant.width)/2,(height-Constant.height)/2);
+        setLocation((Constant.w-Constant.width)/2,(Constant.h-Constant.height)/2);
         setResizable(false);
         initView();
 		//获取焦点
 		this.setFocusable(true);
 
+		/**
+		 * 监听键盘事件
+		 */
 		addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				EventListener.getInstance().keyListener(e,jw,mjf);
+				EventListener.getInstance().keyListener(e,jw, gp);
 			}
 			@Override
 			public void keyTyped(KeyEvent e) {}
@@ -51,11 +49,15 @@ public class MyJFrame extends JFrame  {
 			public void keyReleased(KeyEvent e) {}
 		});
     }
-    
+
+	/**
+	 * 绘制2048游戏
+	 * @param g
+     */
     @Override
     public void paint(Graphics g) {
     	super.paint(g);
-			gameBoard.paint(g);
+			gamePainter.paint(g);
     }
 
     /**
@@ -69,10 +71,11 @@ public class MyJFrame extends JFrame  {
 
 		//下拉列表
 		cbGameMode = new JComboBox();
-		cbGameMode.addItemListener(e -> EventListener.getInstance().gameMode(e,jw,cbGameMode,mjf));
+		//监听下拉列表的Item值改变
+		cbGameMode.addItemListener(e -> EventListener.getInstance().gameMode(e,jw,cbGameMode, gp));
 		cbGameMode.addItem("4X4");
 		cbGameMode.addItem("5X5");
-		cbGameMode.setBounds(450, 240, 95, 30);
+		cbGameMode.setBounds(445, 360, 95, 30);
 		panelOne.add(cbGameMode);
 
         btnRestartGame = new JButton("重新开始");
@@ -80,10 +83,15 @@ public class MyJFrame extends JFrame  {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				EventListener.getInstance().RestartGame(jw,mjf,btnRestartGame);
+				EventListener.getInstance().RestartGame(jw, gp,btnRestartGame);
 			}
 		});
-        btnRestartGame.setBounds(450, 75, 95, 30);
+        btnRestartGame.setBounds(445, 145, 95, 30);
         panelOne.add(btnRestartGame);
+
+		time=new JLabel("游戏时间："+defTime);
+		time.setFont(new Font("Tahoma", Font.BOLD, 20));
+		time.setBounds(250, 10, 200, 45);
+		getContentPane().add(time);
     }
 }

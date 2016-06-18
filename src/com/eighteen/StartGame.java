@@ -1,9 +1,12 @@
 package com.eighteen;
 
+/**
+ * 游戏启动类
+ */
 public class StartGame {
 	
 	public static void main(String[] args) {
-		MyJFrame frame = new MyJFrame();
+		GamePanel frame = new GamePanel();
 		frame.setVisible(true);
 	}
 }

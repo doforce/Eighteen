@@ -2,15 +2,19 @@ package com.eighteen;
 
 import java.awt.event.KeyEvent;
 
-public class JudgeWin {
+/**
+ * 逻辑类
+ */
+public class Judgement {
     public int loc[][]=new int[Constant.SIZE][Constant.SIZE];
     public static boolean change;
     public static int grade;
     public static boolean isOver =false;
 
-    public JudgeWin(){
+    public Judgement(){
         init();
     }
+
     /**
      * 随机位置，随机2或4
      */
@@ -19,7 +23,7 @@ public class JudgeWin {
         int j1=(int)(Math.random()*Constant.ACCOUNT);
         int i2=(int)(Math.random()*Constant.ACCOUNT);
         int j2=(int)(Math.random()*Constant.ACCOUNT);
-        //预防两个位置重合，在随机一次
+        //预防两个位置重合，再随机一次
         if (i1==i2 && j1==j2){
             i1=(int)(Math.random()*Constant.ACCOUNT);
         }
@@ -35,6 +39,7 @@ public class JudgeWin {
         }else{
             num2=1;
         }
+        //-1为空，0-11分别代表2-4096
         for(int x = 0; x<Constant.ACCOUNT; x++)
             for(int y = 0; y<Constant.ACCOUNT; y++)
             {
@@ -47,8 +52,8 @@ public class JudgeWin {
         randomNum();
         calGrade();
     }
-    public static int[] sort(int[] list,int flag)
-    {
+
+    public static int[] sort(int[] list,int flag) {
         if(flag==0){
             for(int i = 0; i<Constant.ACCOUNT; i++){
                 if(list[i]==-1)continue;
@@ -102,6 +107,10 @@ public class JudgeWin {
         return list;
     }
 
+    /**
+     * 判断游戏是否结束
+     * @return
+     */
     public boolean over(){
         for(int h = 0; h<Constant.ACCOUNT; h++)
             for(int l = Constant.ACCOUNT -1; l>=0; l--){
@@ -115,15 +124,28 @@ public class JudgeWin {
         return true;
     }
 
+    /**
+     * 4X4模式下玩到2048就胜利，5X5模式下玩到4096就胜利
+     * @return
+     */
     public boolean win(){
         for(int h = 0; h<Constant.ACCOUNT; h++)
             for(int l = Constant.ACCOUNT -1; l>=0; l--){
-                if(loc[h][l]==10)
-                    return true;
+                if (Constant.isImg100){
+                    if(loc[h][l]==10)
+                        return true;
+                }else {
+                    if(loc[h][l]==11)
+                        return true;
+                }
             }
         return false;
     }
 
+    /**
+     * 计算分值
+     * @return
+     */
     public int calGrade()
     {
         int res=0;
@@ -134,22 +156,28 @@ public class JudgeWin {
         return res;
     }
 
+    /**
+     *把相邻的又数字相同的合并，并且计算分数
+     * @param key
+     */
     public void move(int key){
         int h,l;
         int tmp[]=new int[Constant.ACCOUNT];
-
+        //扫描每一行
         if(key== KeyEvent.VK_LEFT){
-            for(h=0; h<Constant.ACCOUNT; h++)					//扫描每一行
+            for(h=0; h<Constant.ACCOUNT; h++)
                 loc[h]=sort(loc[h],0);
             grade = calGrade();
         }
+        //扫描每一行
         if(key==KeyEvent.VK_RIGHT){
-            for(h=0; h<Constant.ACCOUNT; h++)					//扫描每一行
+            for(h=0; h<Constant.ACCOUNT; h++)
                 loc[h]=sort(loc[h],1);
             grade = calGrade();
         }
+        //扫描每一列
         if(key==KeyEvent.VK_UP){
-            for(l=0; l<Constant.ACCOUNT; l++){					//扫描每一列
+            for(l=0; l<Constant.ACCOUNT; l++){
                 for(h=0;h<Constant.ACCOUNT;h++)
                     tmp[h]= loc[h][l];
                 tmp=sort(tmp,0);
@@ -158,8 +186,9 @@ public class JudgeWin {
             }
             grade = calGrade();
         }
+        //扫描每一列
         if(key==KeyEvent.VK_DOWN){
-            for(l=0; l<Constant.ACCOUNT; l++){					//扫描每一列
+            for(l=0; l<Constant.ACCOUNT; l++){
                 for(h=0;h<Constant.ACCOUNT;h++)
                     tmp[h]= loc[h][l];
                 tmp=sort(tmp,1);
