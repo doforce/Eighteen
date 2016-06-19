@@ -7,9 +7,6 @@ import java.awt.event.KeyEvent;
  */
 public class Judgement {
     public int loc[][]=new int[Constant.SIZE][Constant.SIZE];
-    public static boolean change;
-    public static int grade;
-    public static boolean isOver =false;
 
     public Judgement(){
         init();
@@ -62,7 +59,7 @@ public class Judgement {
                         if(list[i]==list[j]){
                             list[i]=list[i]+1;
                             list[j]=-1;
-                            change=true;
+                            Constant.change=true;
                         }
                         break;
                     }
@@ -73,7 +70,7 @@ public class Judgement {
                     list[k]=list[i];
                     if(k<i){
                         list[i]=-1;
-                        change=true;
+                        Constant.change=true;
                     }
                     k++;
                 }
@@ -87,7 +84,7 @@ public class Judgement {
                         if(list[i]==list[j]){
                             list[i]=list[i]+1;
                             list[j]=-1;
-                            change=true;
+                            Constant.change=true;
                         }
                         break;
                     }
@@ -98,7 +95,7 @@ public class Judgement {
                     list[k]=list[i];
                     if(k>i){
                         list[i]=-1;
-                        change=true;
+                        Constant.change=true;
                     }
                     k--;
                 }
@@ -111,7 +108,7 @@ public class Judgement {
      * 判断游戏是否结束
      * @return
      */
-    public boolean over(){
+    public boolean isGameOver(){
         for(int h = 0; h<Constant.ACCOUNT; h++)
             for(int l = Constant.ACCOUNT -1; l>=0; l--){
                 if(loc[h][l]==-1)
@@ -124,17 +121,15 @@ public class Judgement {
         return true;
     }
 
-    /**
-     * 4X4模式下玩到2048就胜利，5X5模式下玩到4096就胜利
-     * @return
-     */
-    public boolean win(){
+
+    public boolean isVictory(){
         for(int h = 0; h<Constant.ACCOUNT; h++)
-            for(int l = Constant.ACCOUNT -1; l>=0; l--){
-                if (Constant.isImg100){
+            for(int l = Constant.ACCOUNT-1; l>=0; l--){
+                if(!Constant.isContinue){
                     if(loc[h][l]==10)
                         return true;
-                }else {
+                }
+                if (Constant.isContinue){
                     if(loc[h][l]==11)
                         return true;
                 }
@@ -167,13 +162,15 @@ public class Judgement {
         if(key== KeyEvent.VK_LEFT){
             for(h=0; h<Constant.ACCOUNT; h++)
                 loc[h]=sort(loc[h],0);
-            grade = calGrade();
+            Constant.grade = calGrade();
+            Constant.count++;
         }
         //扫描每一行
         if(key==KeyEvent.VK_RIGHT){
             for(h=0; h<Constant.ACCOUNT; h++)
                 loc[h]=sort(loc[h],1);
-            grade = calGrade();
+            Constant.grade = calGrade();
+            Constant.count++;
         }
         //扫描每一列
         if(key==KeyEvent.VK_UP){
@@ -184,7 +181,8 @@ public class Judgement {
                 for(h=0; h<Constant.ACCOUNT; h++)
                     loc[h][l]=tmp[h];
             }
-            grade = calGrade();
+            Constant.grade = calGrade();
+            Constant.count++;
         }
         //扫描每一列
         if(key==KeyEvent.VK_DOWN){
@@ -195,7 +193,8 @@ public class Judgement {
                 for(h=0; h<Constant.ACCOUNT; h++)
                     loc[h][l]=tmp[h];
             }
-            grade = calGrade();
+            Constant.grade = calGrade();
+            Constant.count++;
         }
     }
 

@@ -56,8 +56,11 @@ public class GamePainter {
 		//显示分数
 		g.setFont(new Font("Tahoma", Font.BOLD, 21));
 		g.setColor(Color.BLACK);
-		g.drawString("分数：",40,40);
-		g.drawString(Integer.toString(Judgement.grade),100,40);
+		g.drawString("分数:",50,40);
+		g.drawString(Integer.toString(Constant.grade),110,40);
+
+		g.drawString("游戏步数:",255,40);
+		g.drawString(Integer.toString(Constant.count),360,40);
 
 
 		}

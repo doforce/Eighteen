@@ -18,10 +18,6 @@ public class GamePanel extends JFrame  {
     private JButton btnRestartGame;
 	public GamePanel gp;
 	private Judgement jw;
-	private JLabel time;
-	private String defTime="00:00";
-
-
 
     public GamePanel() {
 		jw =new Judgement();
@@ -41,7 +37,7 @@ public class GamePanel extends JFrame  {
 		addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				EventListener.getInstance().keyListener(e,jw, gp);
+				EventListener.getInstance().keyListener(e,jw, gp,btnRestartGame);
 			}
 			@Override
 			public void keyTyped(KeyEvent e) {}
@@ -83,15 +79,11 @@ public class GamePanel extends JFrame  {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
-				EventListener.getInstance().RestartGame(jw, gp,btnRestartGame);
+				EventListener.getInstance().restartGame(jw, gp,btnRestartGame);
 			}
 		});
         btnRestartGame.setBounds(445, 145, 95, 30);
         panelOne.add(btnRestartGame);
 
-		time=new JLabel("游戏时间："+defTime);
-		time.setFont(new Font("Tahoma", Font.BOLD, 20));
-		time.setBounds(250, 10, 200, 45);
-		getContentPane().add(time);
     }
 }
